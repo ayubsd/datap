@@ -1,0 +1,54 @@
+import hashlib
+import requests
+
+def check_password_leak(password):
+    # Hash the password with SHA-1
+    sha1_hash = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
+    prefix = sha1_hash[:5]  # First 5 characters
+    suffix = sha1_hash[5:]  # Remaining characters
+    
+    # Query the API
+    url = f"https://api.pwnedpasswords.com/range/{prefix}"
+    response = requests.get(url)
+    
+    if response.status_code != 200:
+        print(f"Error: Unable to reach API (Status Code {response.status_code})")
+        return False
+    
+    # Check if the suffix is in the returned list
+    hashes = response.text.splitlines()
+    for line in hashes:
+        hash_suffix, count = line.split(':')
+        if hash_suffix == suffix:
+            return int(count)  # Number of times password was found
+    
+    return 0  # Password not found in the database
+
+def check_credentials(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            for line in file:
+                username, password = line.strip().split(',')
+                leak_count = check_password_leak(password)
+                
+                if leak_count > 0:
+                    print(f"WARNING: Password for {username} has been leaked {leak_count} times!")
+                else:
+                    print(f"SAFE: Password for {username} has not been leaked.")
+    except FileNotFoundError:
+        print(f"Error: File '{file_path}' not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+# Example usage
+file_path = "credentials.txt"  # Replace with your file path
+check_credentials(file_path)
+
+
+------------make file in this format----
+For a file named credentials.txt with the following content:
+
+alice,123456
+bob,password123
+charlie,secureP@ssw0rd
+
