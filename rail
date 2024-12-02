@@ -1,0 +1,74 @@
+def en(text,key):
+    rail=['' for _ in range(key)]
+    row=0
+    dir_down=False
+    for char in text:
+        rail[row]+=char
+        if row==0 or row==key-1:
+            dir_down=not dir_down
+        # row+=1 if dir_down else -1
+        if (dir_down):
+            row+=1
+        else:
+            row-=1
+    return "".join(rail)
+def dec(text,key):
+    rail=['' for _ in range(key)]
+    index=0
+    dir_down=False
+    row=0
+    col=0
+    pattern=[['/n' for _ in range(len(text))] for _ in range(key)]
+    for i in range(len(text)):
+        if row==0:
+            dir_down=True
+        if row==key-1:
+            dir_down=False
+        pattern[row][col]='*'
+        col+=1
+        if (dir_down):
+            row+=1
+        else:
+            row-=1
+    for i in range(key):
+        for j in range(len(text)):
+            if pattern[i][j]=='*' and index<len(text):
+                pattern[i][j]=text[index]
+                index+=1
+    row,col=0,0
+    result=[]
+    for i in range(len(text)):
+        if row==0:
+            dir_down=True
+        if row==key-1:
+            dir_down=False
+        if pattern[row][col]!='\n':
+            result.append(pattern[row][col])
+            col+=1
+        if (dir_down):
+            row+=1
+        else:
+            row-=1
+    return "".join(result)
+
+def program():
+    print("\n\n ----------------Rail Fence Cipher--------------\n\n")
+    while True:
+        print("Press 1 for encrypt.")
+        print("Press 2 for decrypt.")
+        print("Press 3 for exit.")
+        choice=input("\nEnter your choice : ")
+        if choice=='1':
+            text=input("\nEnter text for encryption : ")
+            key=int(input("\nEnter key for encrypt using rail fence cipher : "))
+            print("\n","Encrypted text : ",en(text,key),"\n")
+        elif choice=='2':
+            text=input("\nEnter text for decryption : ")
+            key=int(input("\nEnter key for decrypt using rail fence cipher : "))
+            print("\n","Decrypted text : ",dec(text,key),"\n")
+        elif choice=='3':
+            print("\n\nExit program...!\n")
+            break
+        else:
+            print("\nInvalid choice!!. Enter a valid choice .\n\n")
+program()
