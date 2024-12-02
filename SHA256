@@ -1,0 +1,30 @@
+import rsa
+def has(msg):
+    byte_msg=msg.encode('utf-8')
+    htext=rsa.compute_hash(byte_msg,'SHA-256')
+    h= htext.hex()
+    return h
+def len_hash(msg):
+    byte_msg=msg.encode('utf-8')
+    htext=rsa.compute_hash(byte_msg,'SHA-256').hex()
+    h_len= len(htext)
+    return h_len
+# Menu
+def program():
+    print("------------------SHA-256 hashed representation-----------------")
+    while True:
+        print("\nPress 1 for hash\n")
+        print("Press 2 for hash length\n")
+        print("Press 3 to exit\n")
+        choice=int(input("Enter your choice : "))
+        if choice==1:
+            msg=input("Enter the message : ")
+            print("\nHashed of message you entered \n\n",has(msg))
+        elif choice==2:
+            msg=input("Enter the message : ")
+            print("\nLength of hashed genersted your enetered text :",len_hash(msg))
+        elif choice==3:
+            break
+        else:
+            print("Invalid choice")
+program()
