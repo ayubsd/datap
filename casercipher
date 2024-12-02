@@ -1,0 +1,66 @@
+def encrypt(msg,key):
+    out=''
+    for i in msg:
+        asci=ord(i)
+        if((asci >= 65) and (asci <=90)):
+            c= asci-65
+            d=(c+key) % 26
+            e=d+65
+            out=out+ chr(e)
+        elif ((asci >= 97) and (asci <= 122)):
+            c= asci-97
+            d=(c+key) % 26
+            e=d+97
+            out=out+ chr(e)
+        elif((asci >= 48) and (asci <= 57)):
+            c= asci-48
+            d=(c+key) % 10
+            e=d+48
+            out=out+ chr(e)
+        else:
+            out=out+chr(asci)
+    return out
+def decrypt(msg,key):
+    out=''
+    for i in msg:
+        asci=ord(i)
+        if((asci >= 65) and (asci <=90)):
+            c= asci-65
+            d=(c-key) % 26
+            e=d+65
+            out=out+ chr(e)
+        elif ((asci >= 97) and (asci <= 122)):
+            c= asci-97
+            d=(c-key) % 26
+            e=d+97
+            out=out+ chr(e)
+        elif((asci >= 48) and (asci <= 57)):
+            c= asci-48
+            d=(c-key) % 10
+            e=d+48
+            out=out+ chr(e)
+        else:
+            out=out+chr(asci)
+    return out
+
+def program():
+    print("\n\n ---------------- Caesar Cipher --------------\n\n")
+    while True:
+        print("Press 1 for encrypt.")
+        print("Press 2 for decrypt.")
+        print("Press 3 for exit.")
+        choice=input("\nEnter your choice : ")
+        if choice=='1':
+            text=input("\nEnter text for encryption : ")
+            key=int(input("\nEnter key for encrypt using Caesar Cipher : "))
+            print("\n","Encrypted text : ",encrypt(text,key),"\n")
+        elif choice=='2':
+            text=input("\nEnter text for decryption : ")
+            key=int(input("\nEnter key for decrypt using Caesar Cipher : "))
+            print("\n","Decrypted text : ",decrypt(text,key),"\n")
+        elif choice=='3':
+            print("\n\nExit program...!\n")
+            break
+        else:
+            print("\nInvalid choice!!. Enter a valid choice .\n\n")
+program()
