@@ -1,0 +1,63 @@
+import random
+
+# Read characters from a file
+def read_characters_from_file(file_path):
+    with open(file_path, 'r') as file:
+        return file.read().strip()
+
+# Categorize characters
+def categorize_characters(characters):
+    uppercase = [char for char in characters if char.isupper()]
+    lowercase = [char for char in characters if char.islower()]
+    numbers = [char for char in characters if char.isdigit()]
+    special_characters = [char for char in characters if not char.isalnum()]
+    return uppercase, lowercase, numbers, special_characters
+
+# Generate password
+def generate_password(file_path):
+    characters = read_characters_from_file(file_path)
+    uppercase, lowercase, numbers, special_characters = categorize_characters(characters)
+
+    if not (uppercase and lowercase and numbers and special_characters):
+        raise ValueError("The character set must contain at least one uppercase, one lowercase, one number, and one special character.")
+    
+    # Ensure the password has at least one character from each category
+    password = [
+        random.choice(uppercase),
+        random.choice(lowercase),
+        random.choice(numbers),
+        random.choice(special_characters)
+    ]
+    
+    # Add additional random characters to meet the required length
+    remaining_length = random.randint(4, 8)  # Password will be 8-12 characters long
+    all_characters = uppercase + lowercase + numbers + special_characters
+    password += random.choices(all_characters, k=remaining_length)
+    
+    # Shuffle the password to ensure randomness
+    random.shuffle(password)
+    return ''.join(password)
+
+# Main program
+print("\n\n------------------Random Password Generator------------------\n\n")
+file_path = '/content/drive/MyDrive/siddhi/char.txt'
+
+while True:
+    print("\n\nPress 1 for generating a random password\n")
+    print("Press 2 to exit\n")
+    choice = int(input("Enter your choice: "))
+    
+    if choice == 1:
+        try:
+            password = generate_password(file_path)
+            print("\nRandomly generated password:", password)
+        except ValueError as e:
+            print("\nError:", e)
+    elif choice == 2:
+        print("Exiting the program....!")
+        break
+    else:
+        print("Invalid choice")
+
+----------------EXCEPTED char.tex----------------
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:',.<>?/
